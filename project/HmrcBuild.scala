@@ -14,10 +14,11 @@ object HmrcBuild extends Build {
   lazy val ViewSpec = Project(appName, file("."))
     .enablePlugins(SbtAutoBuildPlugin, SbtGitVersioning)
     .settings(
-      targetJvm := "jvm-1.7",
+      targetJvm := "jvm-1.8",
       libraryDependencies ++= Seq(
         Test.scalaTest,
-        Test.pegdown
+        Test.pegdown,
+	Test.playSpec
       ),
       Developers()
     )
@@ -29,8 +30,9 @@ private object BuildDependencies {
   }
 
   sealed abstract class Test(scope: String) {
-    val scalaTest = "org.scalatest" %% "scalatest" % "2.2.4" % scope
+    val scalaTest = "org.scalatest" %% "scalatest" % "3.0.4" % scope
     val pegdown = "org.pegdown" % "pegdown" % "1.5.0" % scope
+    val playSpec = "org.scalatestplus.play" %% "scalatestplus-play" % "2.0.0" % "test"
   }
 
   object Test extends Test("test")
