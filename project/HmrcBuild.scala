@@ -15,11 +15,7 @@ object HmrcBuild extends Build {
     .enablePlugins(SbtAutoBuildPlugin, SbtGitVersioning)
     .settings(
       targetJvm := "jvm-1.8",
-      libraryDependencies ++= Seq(
-        Test.scalaTest,
-        Test.pegdown,
-	Test.playSpec
-      ),
+      libraryDependencies ++= Test.test,
       Developers()
     )
 }
@@ -30,9 +26,15 @@ private object BuildDependencies {
   }
 
   sealed abstract class Test(scope: String) {
-    val scalaTest = "org.scalatest" %% "scalatest" % "3.0.4" % scope
-    val pegdown = "org.pegdown" % "pegdown" % "1.5.0" % scope
-    val playSpec = "org.scalatestplus.play" %% "scalatestplus-play" % "2.0.0" % "test"
+    lazy val test = Seq(
+      "org.scalatest" %% "scalatest" % "2.2.6" % scope,
+      "org.scalatestplus.play" %% "scalatestplus-play" % "1.5.1" % scope,
+      "uk.gov.hmrc" %% "hmrctest" % "2.3.0" % scope,
+      "org.pegdown" % "pegdown" % "1.6.0" % scope,
+      "org.jsoup" % "jsoup" % "1.8.3" % scope,
+      "org.mockito" % "mockito-all" % "1.9.5" % scope,
+      "org.mockito" % "mockito-core" % "1.9.0" % scope
+    )
   }
 
   object Test extends Test("test")

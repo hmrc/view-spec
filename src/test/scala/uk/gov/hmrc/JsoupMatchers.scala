@@ -14,12 +14,11 @@
  * limitations under the License.
  */
 
-package uk.gov.hmrc.tai.util.viewHelpers
+package uk.gov.hmrc
 
 import org.jsoup.nodes.{Attributes, Document, Element}
 import org.jsoup.select.Elements
 import org.scalatest.matchers.{MatchResult, Matcher}
-import play.api.i18n.Messages
 
 trait JsoupMatchers {
 
@@ -157,8 +156,8 @@ trait JsoupMatchers {
     def apply(left: Element): MatchResult = {
       MatchResult(
         left.text == expectedContent,
-        s"[${expectedContent}] was not equal to [${left.text}]",
-        s"[${expectedContent}] was equal to [${left.text}]"
+        s"[$expectedContent] was not equal to [${left.text}]",
+        s"[$expectedContent] was equal to [${left.text}]"
       )
 
     }
@@ -171,8 +170,8 @@ trait JsoupMatchers {
 
       MatchResult(
         attribVal == expectedContent,
-        s"""[${attribute}="${expectedContent}"] is not a member of the element's attributes:[\n${attributes}]""",
-        s"""[${attribute}="${expectedContent}"] is a member of the element's attributes:[\n${attributes}]""")
+        s"""[$attribute="$expectedContent"] is not a member of the element's attributes:[\n$attributes]""",
+        s"""[$attribute="$expectedContent"] is a member of the element's attributes:[\n$attributes]""")
     }
 
   }
@@ -184,8 +183,8 @@ trait JsoupMatchers {
 
       MatchResult(
         classes.contains(expectedClass),
-        s"[${expectedClass}] is not a member of the element's classes:[\n${classNames}]",
-        s"[${expectedClass}] is a member of the element's classes:[\n${classNames}]")
+        s"[$expectedClass] is not a member of the element's classes:[\n$classNames]",
+        s"[$expectedClass] is a member of the element's classes:[\n$classNames]")
     }
 
   }
@@ -195,13 +194,13 @@ trait JsoupMatchers {
   def haveHeadingH3WithText(expectedText: String) = new TagWithTextMatcher(expectedText, "h3")
   def haveHeadingH4WithText(expectedText: String) = new TagWithTextMatcher(expectedText, "h4")
   def haveHeadingWithText (expectedText: String) = new TagWithTextMatcher(expectedText, "h1")
-  def haveH2HeadingWithIdAndText(id: String, expectedText: String) = new CssSelectorWithTextMatcher(expectedText, s"h2[id=${id}]")
+  def haveH2HeadingWithIdAndText(id: String, expectedText: String) = new CssSelectorWithTextMatcher(expectedText, s"h2[id=$id]")
   def havePreHeadingWithText (expectedText: String, expectedPreHeadingAnnouncement: String = "This section is") =
-    new CssSelectorWithTextMatcher(s"${expectedPreHeadingAnnouncement} ${expectedText}", "header>p")
+    new CssSelectorWithTextMatcher(s"$expectedPreHeadingAnnouncement $expectedText", "header>p")
   def haveH2HeadingWithText (expectedText: String) = new TagWithTextMatcher(expectedText, "h2")
 
-  def haveDescriptionTermWithIdAndText(id: String, expectedText: String) = new CssSelectorWithTextMatcher(expectedText, s"dt[id=${id}]")
-  def haveTermDescriptionWithIdAndText(id: String, expectedText: String) = new CssSelectorWithTextMatcher(expectedText, s"dd[id=${id}]")
+  def haveDescriptionTermWithIdAndText(id: String, expectedText: String) = new CssSelectorWithTextMatcher(expectedText, s"dt[id=$id]")
+  def haveTermDescriptionWithIdAndText(id: String, expectedText: String) = new CssSelectorWithTextMatcher(expectedText, s"dd[id=$id]")
   def haveParagraphWithText (expectedText: String) = new TagWithTextMatcher(expectedText, "p")
   def haveSpanWithText (expectedText: String) = new TagWithTextMatcher(expectedText, "span")
   def haveListItemWithText (expectedText: String) = new TagWithTextMatcher(expectedText, "li")
@@ -221,32 +220,27 @@ trait JsoupMatchers {
   def haveTableWithId(id: String) = new CssSelectorWithAttributeValueMatcher("id", id, "table")
   def haveTableTheadWithId(id: String) = new CssSelectorWithAttributeValueMatcher("id", id, "thead")
   def haveTableTdWithId(id: String) = new CssSelectorWithAttributeValueMatcher("id", id, "td")
-  def haveTableThWithIdAndText(id: String, expectedText: String) = new CssSelectorWithTextMatcher(expectedText, s"th[id=${id}]")
-  def haveTableCaptionWithIdAndText(id: String, expectedText: String) = new CssSelectorWithTextMatcher(expectedText, s"caption[id=${id}]")
+  def haveTableThWithIdAndText(id: String, expectedText: String) = new CssSelectorWithTextMatcher(expectedText, s"th[id=$id]")
+  def haveTableCaptionWithIdAndText(id: String, expectedText: String) = new CssSelectorWithTextMatcher(expectedText, s"caption[id=$id]")
   def haveElementAtPathWithId(elementSelector: String, id: String) = new CssSelectorWithAttributeValueMatcher("id", id, elementSelector)
   def haveElementAtPathWithText(elementSelector: String, expectedText: String) = new CssSelectorWithTextMatcher(expectedText, elementSelector)
   def haveElementAtPathWithAttribute(elementSelector: String, attributeName: String, attributeValue: String) = new CssSelectorWithAttributeValueMatcher(attributeName, attributeValue, elementSelector)
   def haveElementAtPathWithClass(elementSelector: String, className: String) = new CssSelectorWithClassMatcher(className, elementSelector)
-  def haveElementWithId(id: String) = new CssSelector(s"#${id}")
+  def haveElementWithId(id: String) = new CssSelector(s"#$id")
 
   def haveTableRowWithText (expectedText: String) = new TagWithTextMatcher(expectedText, "dt")
   def haveTableRowWithTextDescription (expectedText: String) = new TagWithTextMatcher(expectedText, "dd")
 
-  def haveCheckYourAnswersSummary = new CssSelectorWithAttributeValueMatcher("id", "check-answers-summary", "ul")
-  def haveCheckYourAnswersSummaryLine(lineNo: Int, expectedQuestionText: String) = new TagWithIdAndTextMatcher(expectedQuestionText, "div", s"confirmation-line-${lineNo}-question")
-  def haveCheckYourAnswersSummaryLineAnswer(lineNo: Int, expectedAnswerText: String) = new TagWithIdAndTextMatcher(expectedAnswerText, "div", s"confirmation-line-${lineNo}-answer")
-
-  def haveCheckYourAnswersSummaryLineChangeLink(lineNo: Int, expectedLinkUrl: String) = new IdSelectorWithUrlMatcher(expectedLinkUrl, s"confirmation-line-${lineNo}-change-link")
+  def haveCheckYourAnswersSummary(summaryId: String = "check-answers-summary") = new CssSelectorWithAttributeValueMatcher("id", summaryId, "ul")
 
   def haveLinkWithText (expectedText: String) = new CssSelectorWithTextMatcher(expectedText, "a")
   def haveErrorLinkWithText (expectedText: String) = new CssSelectorWithTextMatcher(expectedText, "div.error-summary>ul>li>a")
   def haveClassWithText(expectedText: String, className: String) = new CssSelectorWithTextMatcher(expectedText, s".$className")
 
-  def haveBackLink = new CssSelector("a[id=backLink]")
-  def haveBackButtonWithUrl(expectedURL: String) = new IdSelectorWithUrlMatcher(expectedURL, "backLink")
-  def haveCancelLinkWithUrl(expectedURL: String) = new IdSelectorWithUrlMatcher(expectedURL, "cancelLink")
+  def haveBackLink(backLink: String = "backLink") = new CssSelector(s"a[id=$backLink]")
+  def haveBackButtonWithUrl(expectedURL: String, backLink: String = "backLink") = new IdSelectorWithUrlMatcher(expectedURL, backLink)
+  def haveCancelLinkWithUrl(expectedURL: String, cancelLink: String) = new IdSelectorWithUrlMatcher(expectedURL, cancelLink)
   def haveLinkWithUrlWithID(id: String, expectedURL: String) = new IdSelectorWithUrlMatcher(expectedURL, id)
-  def haveReturnToSummaryButtonWithUrl(expectedURL: String) = new IdSelectorWithUrlMatcher(expectedURL, "returnToSummary")
 
   //element matchers
   def haveText(expectedText: String) = new ElementWithTextMatcher(expectedText)
